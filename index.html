@@ -176,6 +176,10 @@ h2 { font-size: clamp(28px, 4vw, 38px); }
 .feature h3 { font-size: 17px; letter-spacing: -0.01em; align-self: center; }
 .feature p { color: var(--ink-2); font-size: 15px; }
 .feature p + p { margin-top: 8px; }
+.headline { display: block; background: var(--surface); box-shadow: var(--shadow-card); border-radius: var(--r-window); padding: 28px; margin-bottom: 16px; }
+.headline .kicker { margin: 0 0 8px; }
+.headline h3 { font-size: 22px; letter-spacing: -0.01em; margin: 0 0 10px; }
+.headline p { color: var(--ink-2); font-size: 16px; max-width: 70ch; }
 
 /* Outils */
 .tools { margin-top: 56px; background: var(--surface); box-shadow: var(--shadow-card); border-radius: var(--r-window); overflow: hidden; }
@@ -351,9 +355,9 @@ footer a:hover { color: var(--ink); }
         <p class="kicker">Fonctions</p>
         <h2 id="fonctions-titre">Tout ce qu'il faut pour diriger une équipe d'agents.</h2>
       </div>
-      <div class="feature" style="margin-bottom:20px;padding:28px">
+      <div class="headline">
         <p class="kicker">Nouveau</p>
-        <h3 style="font-size:1.4em">L'histoire d'une demande</h3>
+        <h3>L'histoire d'une demande</h3>
         <p>Ouvre une demande depuis la To-do, l'accueil ou un objectif de la feuille de route, et suis-la de bout en bout sur une seule frise, calme et lisible&nbsp;: <strong>demandée</strong> → <strong>découpée par le chef</strong> → <strong>qui s'en occupe, en direct</strong> → <strong>livrée</strong> (avec « Voir ») → <strong>validée, et par qui</strong> → <strong>objectif atteint</strong>. Plus besoin de chercher où en est ce que tu as demandé.</p>
       </div>
       <ul class="features">
