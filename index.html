@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Agent Scale — le tableau blanc de tes agents IA</title>
-<meta name="description" content="Agent Scale pilote tes agents IA (Claude Code, Codex, Gemini CLI, Kimi) organisés en arbre d'orchestrateurs, sur un tableau blanc, depuis ton Mac. Open source, tout reste en local.">
+<meta name="description" content="Agent Scale fait travailler tes agents IA (Claude Code, Codex, Gemini CLI, Kimi) comme une vraie équipe, sur un tableau blanc, depuis ton Mac : des chefs répartissent et vérifient, toi tu ne décides que de l'essentiel. Tout reste en local.">
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#fafafa" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#18191c" media="(prefers-color-scheme: dark)">
@@ -12,12 +12,12 @@
 <meta property="og:locale" content="fr_FR">
 <meta property="og:site_name" content="Agent Scale">
 <meta property="og:title" content="Agent Scale — le tableau blanc de tes agents IA">
-<meta property="og:description" content="Pilote tes agents IA organisés en arbre d'orchestrateurs, sur un tableau blanc, depuis ton Mac. Open source, tout reste en local.">
+<meta property="og:description" content="Des chefs qui répartissent le travail et le vérifient, toi qui ne décides que de l'essentiel. Sur ton Mac, tout reste en local.">
 <meta property="og:url" content="https://connected-mate.github.io/agent-scale-site/">
 <meta property="og:image" content="https://connected-mate.github.io/agent-scale-site/assets/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Agent Scale : un orchestrateur et son équipe d'agents sur un tableau blanc à points.">
+<meta property="og:image:alt" content="Agent Scale : un orchestrateur et ses trois chefs d'équipe sur un tableau blanc à points.">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
@@ -41,6 +41,8 @@
   --accent: oklch(62.6% .205 254.947);
   --accent-ink: oklch(55.6% .187 255.617);
   --accent-tint: oklch(96% .019 252.878);
+  --accent-text: color-mix(in oklch, var(--accent-ink) 82%, var(--ink)); /* bleu lisible sur fonds teintés (AA) */
+  --orange-text: oklch(52% .15 50);
   --green: oklch(60.3% .155 150.883);
   --green-tint: oklch(95.8% .017 159.118);
   --orange: oklch(68.9% .179 49.902);
@@ -53,7 +55,7 @@
   --shadow-btn: 0 0 0 1px var(--line-strong), var(--shadow-xs);
   --shadow-card: 0 0 0 1px var(--line), var(--shadow-sm);
   --shadow-raised: 0 0 0 1px var(--line), var(--shadow-md);
-  --shadow-overlay: 0 0 0 1px var(--line), var(--shadow-lg);
+  --shadow-overlay: 0 0 0 1px var(--line-strong), var(--shadow-lg);
   --r-chip: 6px;
   --r-control: 8px;
   --r-card: 10px;
@@ -69,14 +71,14 @@
     --page: oklch(20.9% .004 264.477); --canvas: oklch(23.1% .004 264.487); --surface: oklch(26% .006 271.191); --inset: oklch(24.3% .004 264.492); --hover: oklch(28.9% .006 271.22);
     --ink: oklch(96.4% .002 247.839); --ink-2: oklch(73.1% .008 260.731); --ink-3: oklch(54.1% .01 264.484);
     --line: oklch(30.8% .006 258.354); --line-strong: oklch(35.6% .007 264.474); --field: oklch(29.3% .006 271.223);
-    --accent: oklch(68% .173 253.301); --accent-ink: oklch(78.8% .113 248.33); --accent-tint: oklch(68% .173 253.301 / .16);
+    --accent: oklch(68% .173 253.301); --accent-ink: oklch(78.8% .113 248.33); --accent-tint: oklch(68% .173 253.301 / .16); --accent-text: var(--accent-ink); --orange-text: var(--orange);
     --green: oklch(70.5% .154 153.814); --green-tint: oklch(70.5% .154 153.814 / .14);
     --orange: oklch(74.6% .156 55.642); --orange-tint: oklch(74.6% .156 55.642 / .14);
     --red: oklch(66.6% .18 21.433);
     --shadow-btn: 0 0 0 1px oklch(100% 0 0 / .1), 0 1px 2px oklch(0% 0 0 / .3);
     --shadow-card: 0 0 0 1px oklch(100% 0 0 / .11), 0 1px 2px oklch(0% 0 0 / .2), 0 2px 6px oklch(0% 0 0 / .2);
     --shadow-raised: 0 0 0 1px oklch(100% 0 0 / .13), 0 2px 10px oklch(0% 0 0 / .22);
-    --shadow-overlay: 0 0 0 1px oklch(100% 0 0 / .15), 0 8px 28px oklch(0% 0 0 / .34);
+    --shadow-overlay: 0 0 0 1px oklch(100% 0 0 / .14), 0 12px 40px oklch(0% 0 0 / .45);
     color-scheme: dark;
   }
 }
@@ -118,7 +120,7 @@ p { margin: 0; text-wrap: pretty; }
 .btn-sm { height: 34px; padding: 0 12px; font-size: 14px; }
 
 /* ── Héros ───────────────────────────────────────────────────────────── */
-.hero { position: relative; padding: 72px 0 40px; background-image: radial-gradient(var(--line-strong) 1px, transparent 1.25px); background-size: 22px 22px; border-bottom: 1px solid var(--line); overflow: hidden; }
+.hero { position: relative; padding: 72px 0 56px; background-image: radial-gradient(var(--line-strong) 1px, transparent 1.25px); background-size: 22px 22px; border-bottom: 1px solid var(--line); overflow: hidden; }
 .hero::after { content: ""; position: absolute; inset: auto 0 0 0; height: 120px; background: linear-gradient(transparent, var(--page)); pointer-events: none; }
 .hero .wrap { position: relative; z-index: 1; }
 .eyebrow { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 500; color: var(--ink-2); background: var(--surface); box-shadow: var(--shadow-btn); padding: 5px 12px 5px 10px; border-radius: 999px; }
@@ -128,37 +130,17 @@ p { margin: 0; text-wrap: pretty; }
 .cta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
 .hero-note { margin-top: 14px; font-size: 14px; color: var(--ink-2); }
 
-/* Maquette de l'arbre (HTML/CSS, pas d'image) */
-.board { margin: 56px auto 0; max-width: 860px; position: relative; }
-.tree { display: flex; flex-direction: column; align-items: center; }
-.node { background: var(--surface); border-radius: var(--r-card); box-shadow: var(--shadow-raised); padding: 12px 14px; width: 220px; text-align: left; }
-.node-role { font-size: 11px; font-weight: 500; color: var(--ink-2); letter-spacing: .01em; margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-.node-name { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 14px; }
-.node-ico { display: grid; place-items: center; width: 24px; height: 24px; border-radius: var(--r-chip); background: var(--inset); box-shadow: 0 0 0 1px var(--line); color: var(--ink-2); flex-shrink: 0; }
-.node-root .node-ico { background: var(--ink); color: var(--page); box-shadow: none; }
-.node-meta { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 10px; font-size: 12px; color: var(--ink-2); }
-.model { font-family: var(--mono); font-size: 11.5px; }
-.pill { display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 500; padding: 2px 8px; border-radius: 999px; }
-.pill::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
-.pill.run { color: var(--accent-ink); background: var(--accent-tint); }
-.pill.wait { color: oklch(52% .15 50); background: var(--orange-tint); }
-.pill.done { color: oklch(48% .13 150); background: var(--green-tint); }
-@media (prefers-color-scheme: dark) { .pill.wait { color: var(--orange); } .pill.done { color: var(--green); } }
-.todo { font-family: var(--mono); font-size: 11px; color: var(--ink-2); background: var(--inset); box-shadow: 0 0 0 1px var(--line); border-radius: 5px; padding: 1px 6px; }
-.stem { width: 1.5px; height: 28px; background: var(--line-strong); }
-.kids { display: flex; gap: 20px; position: relative; padding-top: 28px; }
-.kids::before { content: ""; position: absolute; top: 0; left: 110px; right: 110px; height: 1.5px; background: var(--line-strong); }
-.kid { position: relative; }
-.kid::before { content: ""; position: absolute; top: -28px; left: 50%; width: 1.5px; height: 28px; background: var(--line-strong); }
-.node .activity { margin-top: 8px; font-size: 12px; color: var(--ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.approval { margin-top: 10px; display: flex; gap: 6px; }
-.approval span { font-size: 11.5px; font-weight: 500; padding: 3px 9px; border-radius: 6px; box-shadow: var(--shadow-btn); background: var(--surface); }
-.approval span:first-child { background: var(--ink); color: var(--page); box-shadow: none; }
+/* Captures de l'app (mode Démo), dans un cadre de fenêtre ; la place est réservée avant le chargement */
+.shot { margin: 0; border-radius: var(--r-window); overflow: hidden; background: var(--surface); box-shadow: var(--shadow-overlay); }
+.shot img { width: 100%; height: auto; aspect-ratio: 1920 / 1200; }
+.shot-wide img { aspect-ratio: 1920 / 678; }
+.shot.hero-shot { margin: 56px 0 0; }
+.cap-note { margin: 14px 0 40px; font-size: 13px; color: var(--ink-2); }
 
 /* ── Sections ────────────────────────────────────────────────────────── */
 section { padding: 88px 0; }
 .section-head { max-width: 680px; margin-bottom: 40px; }
-.kicker, .section-head .kicker, .oss .kicker { font-size: 13px; font-weight: 600; color: var(--accent-ink); letter-spacing: .02em; margin: 0 0 10px; }
+.kicker, .section-head .kicker, .oss .kicker { font-size: 13px; font-weight: 600; color: var(--accent-text); letter-spacing: .02em; margin: 0 0 10px; }
 h2 { font-size: clamp(28px, 4vw, 38px); }
 .section-head p { margin-top: 14px; color: var(--ink-2); font-size: 17px; }
 
@@ -180,6 +162,28 @@ h2 { font-size: clamp(28px, 4vw, 38px); }
 .headline .kicker { margin: 0 0 8px; }
 .headline h3 { font-size: 22px; letter-spacing: -0.01em; margin: 0 0 10px; }
 .headline p { color: var(--ink-2); font-size: 16px; max-width: 70ch; }
+
+/* Le chef décide / toujours toi */
+.split { display: grid; grid-template-columns: 1fr 1fr; margin-top: 20px; border-radius: var(--r-card); box-shadow: 0 0 0 1px var(--line); overflow: hidden; }
+.split > div { padding: 20px 22px 22px; }
+.split > div + div { border-left: 1px solid var(--line); }
+.split h4 { margin: 0; font-size: 15px; font-weight: 600; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.tag { font-size: 12px; font-weight: 500; padding: 2px 9px; border-radius: 999px; }
+.tag-chef { color: var(--accent-text); background: var(--accent-tint); }
+.tag-toi { color: var(--orange-text); background: var(--orange-tint); }
+.split ul { margin: 12px 0 0; padding: 0; list-style: none; display: grid; gap: 8px; color: var(--ink-2); font-size: 15px; }
+.split li { padding-left: 16px; position: relative; }
+.split li::before { content: ""; position: absolute; left: 1px; top: .68em; width: 6px; height: 6px; border-radius: 50%; background: var(--ink-3); }
+.split .foot { margin-top: 14px; font-size: 14px; color: var(--ink-2); }
+.headline .shot { margin-top: 20px; max-width: 760px; box-shadow: 0 0 0 1px var(--line); }
+
+/* Le produit en images : texte + capture, en alternance */
+.rows { display: grid; gap: 88px; margin: 72px 0 72px; }
+.row { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 8fr); gap: 48px; align-items: center; }
+.row:nth-child(even) { grid-template-columns: minmax(0, 8fr) minmax(0, 5fr); }
+.row:nth-child(even) .row-text { order: 2; }
+.row-text h3 { font-size: clamp(22px, 2.4vw, 27px); letter-spacing: -0.02em; }
+.row-text p { margin-top: 12px; color: var(--ink-2); font-size: 16px; }
 
 /* Outils */
 .tools { margin-top: 56px; background: var(--surface); box-shadow: var(--shadow-card); border-radius: var(--r-window); overflow: hidden; }
@@ -210,7 +214,7 @@ h2 { font-size: clamp(28px, 4vw, 38px); }
 .copy { height: 26px; padding: 0 10px; border: 0; border-radius: var(--r-chip); background: var(--surface); box-shadow: var(--shadow-btn); color: var(--ink-2); font: 500 12.5px/1 var(--font); cursor: pointer; }
 .copy:hover { color: var(--ink); }
 .url { display: inline-block; margin-top: 12px; font-family: var(--mono); font-size: 15px; font-weight: 500; background: var(--accent-tint); color: var(--accent-ink); padding: 6px 10px; border-radius: var(--r-control); }
-.tip { margin-top: 16px; font-size: 14px; color: var(--ink-2); border-left: 2px solid var(--line-strong); padding-left: 12px; }
+.tip { margin-top: 16px; font-size: 14px; color: var(--ink-2); }
 
 /* Open source */
 .oss { display: grid; grid-template-columns: 1.2fr 1fr; gap: 32px; align-items: center; background: var(--surface); box-shadow: var(--shadow-card); border-radius: 18px; padding: 40px; }
@@ -228,29 +232,36 @@ footer { border-top: 1px solid var(--line); padding: 32px 0 40px; font-size: 14p
 footer .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; }
 footer .brand { font-size: 14px; }
 footer nav { display: flex; flex-wrap: wrap; gap: 4px 18px; }
-footer a { color: var(--ink-2); }
+footer a { color: var(--ink-2); display: inline-block; padding: 2px 0; }
 footer a:hover { color: var(--ink); }
 .foot-note { flex-basis: 100%; font-size: 13px; }
 
 /* ── Responsive ──────────────────────────────────────────────────────── */
+@media (max-width: 960px) {
+  .row, .row:nth-child(even) { grid-template-columns: 1fr; gap: 24px; }
+  .row:nth-child(even) .row-text { order: 0; }
+  .row-text { max-width: 620px; }
+}
 @media (max-width: 900px) {
   .who { grid-template-columns: 1fr; }
   .features, .steps { grid-template-columns: 1fr; }
   .oss { grid-template-columns: 1fr; padding: 28px; }
-  .kids .kid:nth-child(3) { display: none; }
+  .split { grid-template-columns: 1fr; }
+  .split > div + div { border-left: 0; border-top: 1px solid var(--line); }
 }
 @media (max-width: 640px) {
   .wrap { padding: 0 16px; }
   .nav a:not(.nav-gh) { display: none; }
   .hero { padding: 48px 0 32px; }
   section { padding: 64px 0; }
-  .board { margin-top: 40px; }
-  .node { width: 168px; padding: 10px 11px; }
-  .node-root { width: 220px; }
-  .kids { gap: 14px; }
-  .kids::before { left: 84px; right: 84px; }
-  .node .activity { display: none; }
-  .node-meta .model { display: none; }
+  .shot.hero-shot { margin-top: 40px; }
+  .rows { gap: 64px; margin: 48px 0; }
+  /* Au téléphone, les captures viennent de l'app à la même taille d'écran */
+  .shot-phone { width: 100%; max-width: 340px; margin-inline: auto; border-radius: 18px; }
+  .shot img { aspect-ratio: 780 / 1040; }
+  .hero-shot img { aspect-ratio: 1040 / 474; }
+  .shot-wide img { aspect-ratio: 780 / 376; }
+  .headline { padding: 22px 20px; }
   .feature { padding: 20px; grid-template-columns: 32px 1fr; gap: 4px 14px; }
   .feature .ico { width: 32px; height: 32px; }
   .step { padding: 20px; }
@@ -261,10 +272,6 @@ footer a:hover { color: var(--ink); }
   .tools caption { padding: 16px 14px 6px; }
   .tools .col-test { display: none; }
   .oss { padding: 22px; }
-}
-@media (max-width: 380px) {
-  .node { width: 150px; }
-  .kids::before { left: 75px; right: 75px; }
 }
 </style>
 </head>
@@ -291,43 +298,20 @@ footer a:hover { color: var(--ink); }
     <div class="wrap">
       <p class="eyebrow"><span class="dot" aria-hidden="true"></span>Made for Production and Real Projects.</p>
       <h1>Le tableau blanc de tes agents IA.</h1>
-      <p class="lede">Agent Scale pilote, depuis ton Mac, les agents IA que tu utilises déjà (Claude Code, Codex, Gemini CLI, Kimi), organisés en arbre d'orchestrateurs sur un tableau blanc&nbsp;: tu vois qui fait quoi, tu réponds quand on te demande, et tout reste en local.</p>
+      <p class="lede">Agent Scale fait travailler, depuis ton Mac, les agents IA que tu utilises déjà (Claude Code, Codex, Gemini CLI, Kimi) comme une vraie équipe, sur un tableau blanc&nbsp;: des chefs répartissent le travail et le vérifient, toi tu ne décides que de l'essentiel, et tout reste en local.</p>
       <div class="cta">
         <a class="btn btn-primary" href="#installer">Comment y accéder</a>
         <a class="btn btn-ghost" href="#nouveautes">Voir les nouveautés</a>
       </div>
-      <p class="hero-note">Version 0.1.360 · En développement actif · macOS</p>
+      <p class="hero-note">Version 0.1.476 · En développement actif · macOS</p>
 
-      <figure class="board" aria-labelledby="board-cap">
-        <figcaption id="board-cap" class="sr-only">Exemple de tableau : un orchestrateur et trois agents. « Recherche » est en cours, « Développement » attend ta validation, « Tests » a terminé.</figcaption>
-        <div class="tree" aria-hidden="true">
-          <div class="node node-root">
-            <div class="node-role">Orchestrateur <span class="todo">4/9</span></div>
-            <div class="node-name"><span class="node-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.2L22 12l-7.6 2.8L12 22l-2.4-7.2L2 12l7.6-2.8z"/></svg></span>Mon projet</div>
-            <div class="node-meta"><span class="model">opus</span><span class="pill run">En cours</span></div>
-          </div>
-          <div class="stem"></div>
-          <div class="kids">
-            <div class="kid"><div class="node">
-              <div class="node-role">Agent</div>
-              <div class="node-name"><span class="node-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></span>Recherche</div>
-              <div class="activity">Lit la documentation…</div>
-              <div class="node-meta"><span class="model">sonnet</span><span class="pill run">En cours</span></div>
-            </div></div>
-            <div class="kid"><div class="node">
-              <div class="node-role">Agent</div>
-              <div class="node-name"><span class="node-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5"/></svg></span>Développement</div>
-              <div class="approval"><span>Valider</span><span>Refuser</span></div>
-              <div class="node-meta"><span class="model">sonnet</span><span class="pill wait">Action requise</span></div>
-            </div></div>
-            <div class="kid"><div class="node">
-              <div class="node-role">Agent</div>
-              <div class="node-name"><span class="node-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></span>Tests</div>
-              <div class="activity">Tous les tests passent</div>
-              <div class="node-meta"><span class="model">haiku</span><span class="pill done">Terminé</span></div>
-            </div></div>
-          </div>
-        </div>
+      <figure class="shot hero-shot">
+          <picture>
+            <source media="(max-width: 640px) and (prefers-color-scheme: dark)" srcset="assets/captures/m-board-dark.webp" width="1040" height="474">
+            <source media="(max-width: 640px)" srcset="assets/captures/m-board-light.webp" width="1040" height="474">
+            <source media="(prefers-color-scheme: dark)" srcset="assets/captures/board-dark.webp" width="1920" height="1200">
+            <img src="assets/captures/board-light.webp" width="1920" height="1200" fetchpriority="high" decoding="async" alt="Le tableau d'Agent Scale : l'orchestrateur du projet « Lancement produit » et ses chefs Recherche, Développement et Rédaction, chacun avec son équipe. Une carte orange signale qu'un agent attend une réponse.">
+          </picture>
       </figure>
     </div>
   </div>
@@ -343,7 +327,7 @@ footer a:hover { color: var(--ink); }
       <ul class="who">
         <li><h3>Plusieurs agents à suivre</h3><p>Chaque agent a sa carte, son statut en direct et sa discussion. Les compteurs du haut ouvrent tour à tour ceux qui sont en cours, en échec ou qui attendent une action.</p></li>
         <li><h3>Plusieurs projets, plusieurs dépôts</h3><p>Chaque projet a son propre arbre d'agents ; un dossier qui contient plusieurs dépôts Git devient un espace de travail.</p></li>
-        <li><h3>Des règles à faire respecter</h3><p>Budget par jour, nombre d'agents en même temps, actions qui demandent ton accord : c'est toi qui décides, projet par projet.</p></li>
+        <li><h3>Des règles à faire respecter</h3><p>Ce que le chef peut décider à ta place, nombre d'agents en même temps, actions qui demandent ton accord : c'est toi qui choisis, projet par projet.</p></li>
       </ul>
     </div>
   </section>
@@ -357,14 +341,113 @@ footer a:hover { color: var(--ink); }
       </div>
       <div class="headline">
         <p class="kicker">Nouveau</p>
-        <h3>Le tri : des centaines de lignes, quelques décisions</h3>
-        <p>Quand le travail s'accumule, Agent Scale ne te montre plus une liste interminable. Il regroupe tout par cause et par action&nbsp;: <strong>« 343 bloquées&nbsp;: dossier manquant → Choisir une fois »</strong>, <strong>« 18 déjà vérifiés → Tout valider »</strong>. Chaque action demande une confirmation et laisse <strong>6 secondes pour annuler</strong>. Avant « Tout valider », une relecture rapide carte par carte te laisse valider, renvoyer ou passer chaque travail. Les autorisations, elles, ne se valident jamais en bloc.</p>
+        <h3>Le chef décide à ta place</h3>
+        <p>Avec un seul réglage, le chef de chaque équipe valide le travail, répond aux questions et donne les autorisations en ton nom. Il y a une courte liste de choses qu'il ne touchera jamais.</p>
+        <div class="split">
+          <div>
+            <h4>Ton chef d'équipe s'en charge <span class="tag tag-chef">en ton nom</span></h4>
+            <ul>
+              <li>Valider le travail de son équipe.</li>
+              <li>Répondre aux questions de ses agents.</li>
+              <li>Donner les autorisations du quotidien&nbsp;: modifier un fichier, lancer une commande.</li>
+            </ul>
+            <p class="foot">Tout ce qu'il tranche s'affiche dans « Décidé à ta place ». Tu peux revenir dessus quand tu veux.</p>
+          </div>
+          <div>
+            <h4>Toujours toi <span class="tag tag-toi">jamais délégué</span></h4>
+            <ul>
+              <li>Te connecter à un compte, saisir un mot de passe ou un code.</li>
+              <li>Payer.</li>
+              <li>Effacer l'historique, supprimer en dehors du projet ou le projet entier.</li>
+              <li>Tout ce qui touche à la sécurité.</li>
+            </ul>
+            <p class="foot">Quand une question arrive jusqu'à toi&nbsp;: une notification du Mac avec un son, et un iMessage sur ton téléphone si tu l'as réglé.</p>
+          </div>
+        </div>
+        <figure class="shot shot-phone shot-wide">
+          <picture>
+            <source media="(max-width: 640px) and (prefers-color-scheme: dark)" srcset="assets/captures/m-regles-dark.webp" width="780" height="376">
+            <source media="(max-width: 640px)" srcset="assets/captures/m-regles-light.webp" width="780" height="376">
+            <source media="(prefers-color-scheme: dark)" srcset="assets/captures/regles-dark.webp" width="1920" height="678">
+            <img src="assets/captures/regles-light.webp" width="1920" height="678" loading="lazy" decoding="async" alt="Les règles d'un projet : Pilote automatique, Le chef décide à ma place (coché), Une copie par agent, Priorité et Agents en même temps.">
+          </picture>
+        </figure>
       </div>
-      <div class="headline">
-        <p class="kicker">Nouveau</p>
-        <h3>L'histoire d'une demande</h3>
-        <p>Ouvre une demande depuis la To-do, l'accueil ou un objectif de la feuille de route, et suis-la de bout en bout sur une seule frise, calme et lisible&nbsp;: <strong>demandée</strong> → <strong>découpée par le chef</strong> → <strong>qui s'en occupe, en direct</strong> → <strong>livrée</strong> (avec « Voir ») → <strong>validée, et par qui</strong> → <strong>objectif atteint</strong>. Plus besoin de chercher où en est ce que tu as demandé.</p>
+
+      <div class="rows">
+        <article class="row" aria-labelledby="r-accueil">
+          <div class="row-text">
+            <h3 id="r-accueil">En arrivant, ce qui t'attend. Rien d'autre.</h3>
+            <p>« À toi » réunit les questions et les échecs qui demandent ta décision, avec le bon bouton à côté. « Depuis ta dernière visite » montre ce qui a été livré, avec la preuve et le coût.</p>
+          </div>
+          <figure class="shot shot-phone">
+          <picture>
+            <source media="(max-width: 640px) and (prefers-color-scheme: dark)" srcset="assets/captures/m-home-dark.webp" width="780" height="1040">
+            <source media="(max-width: 640px)" srcset="assets/captures/m-home-light.webp" width="780" height="1040">
+            <source media="(prefers-color-scheme: dark)" srcset="assets/captures/home-dark.webp" width="1920" height="1200">
+            <img src="assets/captures/home-light.webp" width="1920" height="1200" loading="lazy" decoding="async" alt="L'accueil : la liste « À toi » avec deux questions et deux échecs, les navigateurs des agents et les projets.">
+          </picture>
+          </figure>
+        </article>
+        <article class="row" aria-labelledby="r-question">
+          <div class="row-text">
+            <h3 id="r-question">Une question&nbsp;? Une carte, une réponse.</h3>
+            <p>L'agent pose sa question avec des choix tout prêts. Les chefs portent trois chiffres sur leur carte&nbsp;: ce que coûte un travail, ce qui passe du premier coup, et la part faite par le chef.</p>
+          </div>
+          <figure class="shot shot-phone">
+          <picture>
+            <source media="(max-width: 640px) and (prefers-color-scheme: dark)" srcset="assets/captures/m-chat-dark.webp" width="780" height="1040">
+            <source media="(max-width: 640px)" srcset="assets/captures/m-chat-light.webp" width="780" height="1040">
+            <source media="(prefers-color-scheme: dark)" srcset="assets/captures/chat-dark.webp" width="1920" height="1200">
+            <img src="assets/captures/chat-light.webp" width="1920" height="1200" loading="lazy" decoding="async" alt="La carte de l'agent Relecture est ouverte : il demande si le ton de l'article est bon pour la publication et propose trois réponses à choisir.">
+          </picture>
+          </figure>
+        </article>
+        <article class="row" aria-labelledby="r-kanban">
+          <div class="row-text">
+            <h3 id="r-kanban">De la demande à la preuve.</h3>
+            <p>Ta demande devient des tâches&nbsp;: à faire, en cours, à vérifier, vérifié. Chaque livraison est essayée par un agent neuf qui cherche à la casser&nbsp;; rien n'est « fini » sans preuve.</p>
+          </div>
+          <figure class="shot shot-phone">
+          <picture>
+            <source media="(max-width: 640px) and (prefers-color-scheme: dark)" srcset="assets/captures/m-kanban-dark.webp" width="780" height="1040">
+            <source media="(max-width: 640px)" srcset="assets/captures/m-kanban-light.webp" width="780" height="1040">
+            <source media="(prefers-color-scheme: dark)" srcset="assets/captures/kanban-dark.webp" width="1920" height="1200">
+            <img src="assets/captures/kanban-light.webp" width="1920" height="1200" loading="lazy" decoding="async" alt="Le kanban : la to-do écrite par toi à gauche, puis les colonnes À faire, En cours, À vérifier et Vérifié.">
+          </picture>
+          </figure>
+        </article>
+        <article class="row" aria-labelledby="r-objectifs">
+          <div class="row-text">
+            <h3 id="r-objectifs">Des objectifs, pas une liste sans fin.</h3>
+            <p>Au-dessus des tâches, chaque objectif dit le problème à régler, ce qui n'est pas au programme et le chef qui le porte. Les chefs proposent, tu acceptes ou tu refuses, et tu vois ce qu'il a coûté.</p>
+          </div>
+          <figure class="shot shot-phone">
+          <picture>
+            <source media="(max-width: 640px) and (prefers-color-scheme: dark)" srcset="assets/captures/m-objectifs-dark.webp" width="780" height="1040">
+            <source media="(max-width: 640px)" srcset="assets/captures/m-objectifs-light.webp" width="780" height="1040">
+            <source media="(prefers-color-scheme: dark)" srcset="assets/captures/objectifs-dark.webp" width="1920" height="1200">
+            <img src="assets/captures/objectifs-light.webp" width="1920" height="1200" loading="lazy" decoding="async" alt="Les objectifs en trois colonnes : Proposés, avec Accepter et Refuser ; En cours, avec leur avancement ; Livrés, avec ce qu'ils ont coûté.">
+          </picture>
+          </figure>
+        </article>
+        <article class="row" aria-labelledby="r-conso">
+          <div class="row-text">
+            <h3 id="r-conso">Ce que ça coûte, au centime près.</h3>
+            <p>Par chef, par agent et par outil&nbsp;: le coût d'un travail vérifié et la part de dépense qui a vraiment servi. Montré, jamais un plafond&nbsp;: les agents ne s'arrêtent pas pour une question de dépense.</p>
+          </div>
+          <figure class="shot shot-phone">
+          <picture>
+            <source media="(max-width: 640px) and (prefers-color-scheme: dark)" srcset="assets/captures/m-conso-dark.webp" width="780" height="1040">
+            <source media="(max-width: 640px)" srcset="assets/captures/m-conso-light.webp" width="780" height="1040">
+            <source media="(prefers-color-scheme: dark)" srcset="assets/captures/conso-dark.webp" width="1920" height="1200">
+            <img src="assets/captures/conso-light.webp" width="1920" height="1200" loading="lazy" decoding="async" alt="La vue Consommation : dépense sur 30 jours, coût par travail vérifié, travaux acceptés du premier coup, puis un tableau par chef d'équipe.">
+          </picture>
+          </figure>
+        </article>
       </div>
+      <p class="cap-note">Captures de l'app en mode démo, avec des données d'exemple.</p>
+
       <ul class="features">
         <li class="feature">
           <span class="ico" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="5" rx="1.2"/><rect x="3" y="16" width="6" height="5" rx="1.2"/><rect x="15" y="16" width="6" height="5" rx="1.2"/><path d="M12 8v4M6 16v-2a2 2 0 012-2h8a2 2 0 012 2v2"/></svg></span>
@@ -394,12 +477,12 @@ footer a:hover { color: var(--ink); }
         <li class="feature">
           <span class="ico" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="7" height="7" rx="1.5"/><rect x="14" y="4" width="7" height="7" rx="1.5"/><rect x="3" y="15" width="7" height="5" rx="1.5"/><rect x="14" y="15" width="7" height="5" rx="1.5"/></svg></span>
           <h3>L'Organisateur</h3>
-          <p>« Améliorer l'organisation » fait le bilan du projet et propose ses conseils. L'agent Organisateur pose 1 à 3 questions, puis envoie une seule proposition (chantiers, modèles, budget…). Tu valides avant que rien ne change, et « Annuler » remet tout comme avant.</p>
+          <p>« Améliorer l'organisation » fait le bilan du projet et propose ses conseils. L'agent Organisateur pose 1 à 3 questions, puis envoie une seule proposition (chantiers, modèles…). Tu valides avant que rien ne change, et « Annuler » remet tout comme avant.</p>
         </li>
         <li class="feature">
           <span class="ico" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg></span>
-          <h3>Règles, budget et approbations</h3>
-          <p>Par projet : priorité (qualité, équilibre, rapidité, économie), agents en même temps, budget par jour et « Me demander avant de… » modifier, lancer des commandes, supprimer ou aller sur Internet. Avec Claude Code, une vraie carte « Autoriser / Refuser » attend ta réponse.</p>
+          <h3>Règles et approbations</h3>
+          <p>Par projet : priorité (qualité, équilibre, rapidité, économie), agents en même temps, pilote automatique, « Le chef décide à ma place » et « Me demander avant de… » modifier, lancer des commandes, supprimer ou aller sur Internet. Avec Claude Code, une vraie carte « Autoriser / Refuser » attend ta réponse.</p>
         </li>
         <li class="feature">
           <span class="ico" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg></span>
@@ -423,13 +506,13 @@ footer a:hover { color: var(--ink); }
         </li>
         <li class="feature">
           <span class="ico" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg></span>
-          <h3>Vue Équipes et Feuille de route</h3>
-          <p>Une colonne par chantier, le chef en tête, puis son staff avec l'état et la tâche en cours. La feuille de route liste les paris : problème, appétit, hors périmètre.</p>
+          <h3>Objectifs</h3>
+          <p>Dans le Kanban, la présentation « Objectifs » liste les paris de l'équipe : problème, hors périmètre, chef qui le porte, avancement et coût. Partagés entre les projets d'un espace de travail.</p>
         </li>
         <li class="feature">
           <span class="ico" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg></span>
           <h3>Consommation au jeton près</h3>
-          <p>Jetons par tour, indicateurs par agent et par chef, et une vue « Consommation » pour savoir où part le budget.</p>
+          <p>Jetons par tour, indicateurs par agent et par chef, et une vue « Consommation » pour savoir où part la dépense. Montrée, jamais un plafond.</p>
         </li>
         <li class="feature">
           <span class="ico" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg></span>
@@ -440,6 +523,46 @@ footer a:hover { color: var(--ink); }
           <span class="ico" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg></span>
           <h3>Interdits et garde-fous</h3>
           <p>Des actions que les agents ne font jamais, même en « tout autoriser », vérifiées aussi dans les scripts lancés.</p>
+        </li>
+        <li class="feature">
+          <span class="ico" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg></span>
+          <h3>Le tri</h3>
+          <p>Des centaines de lignes deviennent quelques décisions, regroupées par cause et par action, avec une confirmation et 6 secondes pour annuler. Les autorisations ne se valident jamais en bloc.</p>
+        </li>
+        <li class="feature">
+          <span class="ico" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg></span>
+          <h3>L'histoire d'une demande</h3>
+          <p>Suis une demande de bout en bout sur une seule frise : demandée, découpée par le chef, qui s'en occupe en direct, livrée, validée et par qui.</p>
+        </li>
+        <li class="feature">
+          <span class="ico" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg></span>
+          <h3>Pilote automatique</h3>
+          <p>L'équipe avance sans t'attendre : les tâches prêtes se lancent, celles coupées par un redémarrage reprennent, un échec est relancé une fois.</p>
+        </li>
+        <li class="feature">
+          <span class="ico" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg></span>
+          <h3>Une copie par agent</h3>
+          <p>Dès 3 agents, chacun travaille dans sa propre copie du projet : personne n'écrase le travail d'un autre. Tout rejoint le projet une fois validé.</p>
+        </li>
+        <li class="feature">
+          <span class="ico" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg></span>
+          <h3>Protection du Mac</h3>
+          <p>Processeur, mémoire et disque sont surveillés toutes les 5 secondes. Si le Mac sature, les nouveaux départs attendent leur tour ; rien n'est coupé en cours de route.</p>
+        </li>
+        <li class="feature">
+          <span class="ico" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg></span>
+          <h3>Un navigateur pour les agents</h3>
+          <p>Invisible, sans fenêtre qui surgit. Tu vois son écran en direct et tu peux « Prendre la main ». Les agents refusent de remplir un mot de passe ou une carte bancaire.</p>
+        </li>
+        <li class="feature">
+          <span class="ico" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg></span>
+          <h3>Poids des dépôts surveillé</h3>
+          <p>Les fichiers trop lourds ne partent pas sur Git par erreur, et une alerte prévient avant de dépasser la place prévue chez ton hébergeur.</p>
+        </li>
+        <li class="feature">
+          <span class="ico" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg></span>
+          <h3>Pilotable par ton propre assistant</h3>
+          <p>Branche le serveur « agent-scale » dans ton Claude Code : il suit les projets, écrit aux agents et répond à leurs questions. Jamais de suppression ni d'autorisation : ça reste à toi.</p>
         </li>
       </ul>
 
@@ -478,9 +601,34 @@ footer a:hover { color: var(--ink); }
       <div class="section-head">
         <p class="kicker">Nouveautés</p>
         <h2 id="nouv-titre">Où en est Agent Scale.</h2>
-        <p>Version actuelle&nbsp;: <strong>0.1.360</strong>.</p>
+        <p>Version actuelle&nbsp;: <strong>0.1.476</strong>.</p>
       </div>
       <ul class="features">
+        <li class="feature">
+          <span class="ico" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg></span>
+          <h3>0.1.476 · Le chef décide à ta place</h3>
+          <p>« Le chef décide à ma place », actif par défaut et réglable par projet : le chef valide le travail de son équipe, répond aux questions de ses agents et donne les autorisations du quotidien en ton nom. Restent toujours à toi : te connecter, payer, effacer l'historique, supprimer en dehors du projet, et la sécurité. Ce qu'il tranche s'affiche dans « Décidé à ta place ». Une question qui arrive jusqu'à toi déclenche une notification du Mac avec un son, et un iMessage si tu l'as réglé, une seule fois par question. Aussi : les vérifications en lecture seule (récupérer les nouveautés, lire une demande de fusion) ne demandent plus d'accord, les agents ne peuvent plus envoyer de fichiers trop lourds sur Git, et le site vitrine montre de vraies captures de l'app.</p>
+        </li>
+        <li class="feature">
+          <span class="ico" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg></span>
+          <h3>0.1.451 · Une équipe qui tient la nuit</h3>
+          <p>Un redémarrage ne crée plus d'agents en double : arrêt propre, aucun départ pendant l'arrêt, reprise courte. Une grande équipe ne s'enchaîne plus en file indienne : un agent n'attend un autre que s'ils modifient le même fichier. Pour choisir qui fait quoi, le chef voit les agents en place, les modèles et les agents sur mesure, avec une recommandation. « Concentrer sur son équipe » pâlit tout le reste du tableau. Un bouton « Lancer dans le Terminal » apparaît sur les commandes, avec confirmation et avertissement si elle est risquée. Les questions dépassées se replient toutes seules.</p>
+        </li>
+        <li class="feature">
+          <span class="ico" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg></span>
+          <h3>0.1.433 · Plus rien ne s'arrête pour une question de dépense</h3>
+          <p>Il n'y a plus de budget qui coupe le travail : la dépense reste visible partout, mais n'est jamais un plafond. Une limite d'utilisation atteinte met l'agent en pause, puis il reprend tout seul : ce n'est plus un échec. Le navigateur des agents est devenu invisible, sans fenêtre ni dialogue qui surgit à l'écran. « Une copie par agent » : dès 3 agents, chacun travaille dans sa propre copie du projet, livrée à la validation. Les commandes sans danger (lire, tester, construire, enregistrer) ne te demandent plus rien, et toute suppression reste demandée. L'accueil d'un projet met le chef au centre.</p>
+        </li>
+        <li class="feature">
+          <span class="ico" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg></span>
+          <h3>0.1.403 · Quatre vues, plus simples</h3>
+          <p>La barre ne garde que quatre vues : Accueil, Tableau, Kanban et Recherche. La feuille de route devient la présentation « Objectifs » du Kanban, l'historique passe dans la recherche, et la vue Équipes rejoint le Tableau. Sur le tableau, les échanges entre agents se voient en direct : un trait bleu qui descend quand le chef confie une tâche, et remonte quand on lui répond. Une barre montre la mémoire utilisée par chaque agent. Un bac à sable (OpenShell, de NVIDIA) peut isoler un projet ; il est éteint par défaut.</p>
+        </li>
+        <li class="feature">
+          <span class="ico" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg></span>
+          <h3>0.1.375 · Un récapitulatif digne de confiance</h3>
+          <p>Un défaut encore ouvert n'apparaît jamais en vert, chaque coût est expliqué, et un seul compte s'affiche. « Validé malgré un échec » n'apparaît plus que pour un vrai échec non résolu, et disparaît dès que la preuve rejouée passe. Les agents n'abandonnent plus leurs longues suites de tests en fin de tour.</p>
+        </li>
         <li class="feature">
           <span class="ico" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg></span>
           <h3>0.1.360 · Contrôle indépendant</h3>
